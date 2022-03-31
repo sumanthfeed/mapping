@@ -1,8 +1,153 @@
-import React from 'react'
+import React,{useState} from 'react'
+import {  Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, } from '@material-ui/core';
+
+const categoryModelOne = [
+  {
+    name: 'Production',
+    value: 'production',
+    // icon: 'fas fa-tractor'
+  },
+  {
+    name: 'Market Yard',
+    value: 'marketyard',
+    // icon: 'fas fa-tractor'
+  },
+  {
+    name: 'Cold Storages',
+    value: 'coldstorages',
+    // icon: 'fas fa-tractor'
+  },
+  {
+    name: 'Value Addition units',
+    value: 'valuadditionunits',
+    // icon: 'fas fa-tractor'
+  },
+  {
+    name: 'Export Star Houses',
+    value: 'valuadditionunits',
+    // icon: 'fas fa-tractor'
+  },
+  {
+    name: 'FPO',
+    value: 'fpo',
+    // icon: 'fas fa-users',
+  },
+  {
+    name: 'Industries',
+    value: 'industries',
+    // icon: 'fas fa-warehouse',
+  },
+  {
+    name: 'Govt offices',
+    value: 'govtoffices',
+    // icon: 'fas fa-store',
+  },
+  {
+    name: 'DCCB / PACS',
+    value: 'dccb',
+    icon: '',
+  },
+  {
+    name: 'Universities & Colleges',
+    value: 'universitiescolleges',
+  },
+  {
+    name: 'Political Picture',
+    value: 'political',
+  },
+]
 
 function DistrictProfile() {
+
+  const [findProduct, setFindProduct] = useState({
+    selectstate: '',
+    selectdistrict: '',
+  })
+  const { selectstate, selectdistrict } = findProduct;
+
+  const searchOnChange = (e) => {
+    setFindProduct({ ...findProduct, [e.target.name]: [e.target.value] })
+  }
+
+  const searchFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(findProduct)
+  }
   return (
     <>
+      <form onSubmit={searchFormSubmit}>
+        <Grid
+          container
+          lg={12}
+          item
+          justifyContent="space-around"
+          spacing={1}
+        >
+          <Grid lg={4} md={3} sm={12} xs={12} item>
+            <TextField
+              fullWidth
+              select
+              variant="outlined"
+              margin="normal"
+              label="Select State"
+              style={{ backgroundColor: 'white' }}
+              size="small"
+              name="selectstate"
+              value={selectstate}
+              onChange={searchOnChange}
+            >
+              <MenuItem value="electricitybill">Andhra Pradesh</MenuItem>
+              <MenuItem value="waterbill">Telangana</MenuItem>
+              <MenuItem value="housetax">Karnataka</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid lg={4} md={3} sm={12} xs={12} item>
+            <TextField
+              fullWidth
+              select
+              variant="outlined"
+              margin="normal"
+              label="Select District"
+              style={{ backgroundColor: 'white' }}
+              size="small"
+              name="selectdistrict"
+              value={selectdistrict}
+              onChange={searchOnChange}
+            >
+              <MenuItem value="electricitybill">Krishna</MenuItem>
+              <MenuItem value="waterbill">Guntur</MenuItem>
+              <MenuItem value="housetax">West Godavari</MenuItem>
+            </TextField>
+          </Grid>
+        </Grid>
+        <div>
+          <h5>Category Selection</h5>
+          <FormGroup row>
+            {categoryModelOne.map((item, index) => (
+              <Grid item lg={2}>
+                <FormControlLabel
+                  name={item.name}
+                  value={item.value}
+                  onChange={searchOnChange}
+                  variant="outlined"
+                  control={<Checkbox color="primary" />}
+                  label={item.name}
+                  labelPlacement="end"
+                  InputLabelProps={{
+                    style: {
+                      fontSize: "5px"
+                    }
+                  }}
+                />
+                <i class={item.icon}></i>
+              </Grid>
+            ))}
+          </FormGroup>
+        </div>
+        <Grid container justifyContent="center" style={{ marginTop: '15px' }}>
+          <button className="btn btn-warning" type="submit">Search</button>
+        </Grid>
+      </form>
       <div style={{ margin: '20px 0px', borderBottom: "1px solid #d1d1d1" }}>
         <h6>Production</h6>
       </div>
