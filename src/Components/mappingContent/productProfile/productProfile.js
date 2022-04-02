@@ -1,7 +1,14 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react'
-import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox,  FormGroup, } from '@material-ui/core';
+import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, Divider, } from '@material-ui/core';
 import PieChart from '../../analytics/pieChart/pieChart';
-import { GoogleMap, useJsApiLoader, Marker, LoadScript, Polygon,useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker, LoadScript, Polygon, useLoadScript } from "@react-google-maps/api";
+import PPProduction from './ppProduction/ppProduction';
+import PPUntapped from './ppUntapped/ppUntapped';
+import PPByProducts from './ppByProducts/ppByProducts';
+import PPVau from './ppVau/ppVau';
+import PPBuyerSeller from './ppBuyerSeller/ppBuyerSeller';
+import PPSchemesPolicies from './ppSchemesPolicies/ppSchemesPolicies';
+import PPProductGuide from './ppProductGuide/ppProductGuide';
 
 const district = [
   {
@@ -16,15 +23,18 @@ const district = [
 const useStyles = makeStyles(theme => ({
   productionBlock: {
     marginTop: '20px',
-    borderBottom: "1px solid #d1d1d1"
+    borderBottom: "1px solid #d1d1d1",
+
   },
   tradeBlock: {
     marginTop: '20px',
-    borderBottom: "1px solid #d1d1d1"
+    borderBottom: "1px solid #d1d1d1",
+    padding: '0px 15px'
   },
   untappedBlock: {
     margin: '20px 0px',
-    borderBottom: "1px solid #d1d1d1"
+    borderBottom: "1px solid #d1d1d1",
+    padding: '0px 15px'
   },
   byProductsBlock: {
     margin: '20px 0px',
@@ -151,7 +161,7 @@ const containerStyle = {
 
 function ProductProfile() {
   const classes = useStyles();
-  
+
 
 
   const [findProduct, setFindProduct] = useState({
@@ -188,8 +198,8 @@ function ProductProfile() {
   }), [])
 
   const center = useMemo(() => ({
-      lat: 20.5937,
-      lng: 78.9629
+    lat: 20.5937,
+    lng: 78.9629
   }), [])
   const onUnmount = useCallback(function callback(map) {
     setMap(map)
@@ -310,11 +320,11 @@ function ProductProfile() {
               onChange={searchOnChange}
               margin="normal"
               style={{ backgroundColor: 'white' }}
-              InputLabelProps={{
-                style: {
-                  color: 'black',
-                }
-              }}
+              // InputLabelProps={{
+              //   style: {
+              //     color: 'black',
+              //   }
+              // }}
             />
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -330,11 +340,11 @@ function ProductProfile() {
               onChange={searchOnChange}
               margin="normal"
               style={{ backgroundColor: 'white' }}
-              InputLabelProps={{
-                style: {
-                  color: 'black',
-                }
-              }}
+              // InputLabelProps={{
+              //   style: {
+              //     color: 'black',
+              //   }
+              // }}
             />
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -394,10 +404,10 @@ function ProductProfile() {
           </Grid>
         </Grid>
         <div>
-          <h5>Category Selection</h5>
+          <label>Category Selection</label>
           <FormGroup row>
             {categoryModelOne.map((item, index) => (
-              <Grid item lg={2}>
+              <Grid item lg={2} key={index}>
                 <FormControlLabel
                   name={item.name}
                   value={item.value}
@@ -406,13 +416,12 @@ function ProductProfile() {
                   control={<Checkbox color="primary" />}
                   label={item.name}
                   labelPlacement="end"
-                  InputLabelProps={{
-                    style: {
-                      fontSize: "5px"
-                    }
-                  }}
+                  // InputLabelProps={{
+                  //   style: {
+                  //     fontSize: "5px"
+                  //   }
+                  // }}
                 />
-                <i class={item.icon}></i>
               </Grid>
             ))}
           </FormGroup>
@@ -432,7 +441,7 @@ function ProductProfile() {
             onUnmount={onUnmount}
           >
             <>
-              { /* Child components, such as markers, info windows, etc. */}
+              {/* Child components, such as markers, info windows, etc. */}
               {productPositions.map((item, index) => (
                 <Marker position={item} key={index} icon={`${process.env.PUBLIC_URL}/assets/mango.png`}></Marker>
               ))}
@@ -446,24 +455,16 @@ function ProductProfile() {
           </GoogleMap>
         ) : <></>
       }
-      <div className={classes.productionBlock}>
-        <h6>Production</h6>
-      </div>
-      <div className={classes.tradeBlock}>
+      <PPProduction />
+      <div style={{ padding: '10px 15px',margin:'15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>
         <h6>Trade</h6>
+        <small><span style={{ color: 'red' }}>Source: Ministry of Commerce.</span> For Export, Import, Domestic Trade Values <a href='https://commerce.gov.in/' target='_blank' rel="noreferrer">(Click here)</a></small>
       </div>
-      <div className={classes.untappedBlock}>
-        <h6>Untapped</h6>
-      </div>
-      <div className={classes.byProductsBlock}>
-        <h6>By - Products</h6>
-      </div>
-      <div className={classes.vauBlock}>
-        <h6>Value Addition Units</h6>
-      </div>
-      <div className={classes.buyersSellersBlock}>
-        <h6>Buyers Sellers</h6>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+      <PPUntapped />
+      <PPByProducts />
+      <PPVau />
+
+      {/* <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Grid lg={5} md={12} sm={12} xs={12} item style={{ border: "2px solid grey", borderRadius: "10px 10px", padding: '5px' }}>
             <h6 style={{ fontSize: '14px' }}>Buyers</h6>
             <PieChart />
@@ -472,19 +473,15 @@ function ProductProfile() {
             <h6 style={{ fontSize: '14px' }}>Sellers</h6>
             <PieChart />
           </Grid>
-        </div>
-      </div>
-      <div className={classes.schemesPoliciesBlock}>
-        <h6>Schemes &amp; Policies</h6>
-      </div>
-      <div className={classes.productGuideBlock}>
-        <h6>Product Guide</h6>
-      </div>
+        </div> */}
+      <PPBuyerSeller />
+      <PPSchemesPolicies />
+      <PPProductGuide />
       <div className={classes.footPrintBlock}>
-        <h6>Foot Print</h6>
+        <h6 style={{color:'#d48715'}}>Foot Print</h6>
       </div>
       <div className={classes.eximDocsBlock}>
-        <h6>Exim Documentation</h6>
+        <h6 style={{color:'#d48715'}}>Exim Documentation</h6>
       </div>
     </>
   )
