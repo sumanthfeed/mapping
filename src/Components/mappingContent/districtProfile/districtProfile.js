@@ -5,42 +5,34 @@ const categoryModelOne = [
   {
     name: 'Production',
     value: 'production',
-    // icon: 'fas fa-tractor'
   },
   {
     name: 'Market Yard',
     value: 'marketyard',
-    // icon: 'fas fa-tractor'
   },
   {
     name: 'Cold Storages',
     value: 'coldstorages',
-    // icon: 'fas fa-tractor'
   },
   {
     name: 'Value Addition units',
     value: 'valuadditionunits',
-    // icon: 'fas fa-tractor'
   },
   {
     name: 'Export Star Houses',
     value: 'valuadditionunits',
-    // icon: 'fas fa-tractor'
   },
   {
     name: 'FPO',
     value: 'fpo',
-    // icon: 'fas fa-users',
   },
   {
     name: 'Industries',
     value: 'industries',
-    // icon: 'fas fa-warehouse',
   },
   {
     name: 'Govt offices',
     value: 'govtoffices',
-    // icon: 'fas fa-store',
   },
   {
     name: 'DCCB / PACS',
@@ -124,7 +116,7 @@ function DistrictProfile() {
           <h5>Category Selection</h5>
           <FormGroup row>
             {categoryModelOne.map((item, index) => (
-              <Grid item lg={2}>
+              <Grid item lg={2} key={index}>
                 <FormControlLabel
                   name={item.name}
                   value={item.value}

@@ -157,24 +157,67 @@ const containerStyle = {
 //   lng: 78.9629
 // };
 
-
+const countriesData = [
+  {
+    name: "Germany",
+    states: ["Duesseldorf", "Leinfelden-Echterdingen", "Eschborn"]
+  },
+  {
+    name: "India",
+    states: ["Delhi", "Kolkata", "Mumbai", "Bangalore"]
+  },
+  {
+    name: "France",
+    states: ["Auvergne", "Bretagne", "Corse", "Centre"]
+  }
+];
 
 function ProductProfile() {
   const classes = useStyles();
 
+  // const [{ country, state }, setData] = useState({
+  //   country: "Germany",
+  //   state: ""
+  // });
+
+
+
+  // function handleCountryChange(event) {
+  //   setData(data => ({ state: '', country: event.target.value }));
+  // }
+
+  // function handleStateChange(event) {
+  //   setData(data => ({ ...data, state: event.target.value }));
+  // }
 
 
   const [findProduct, setFindProduct] = useState({
     productname: '',
     hscode: '',
-    selectcountry: '',
-    selectstate: '',
+    country: '',
+    state: '',
     selectdistrict: '',
   })
-  const { productname, hscode, selectcountry, selectstate, selectdistrict } = findProduct;
+  const { productname, hscode, country, state, selectdistrict } = findProduct;
+
+
+
+  const countries = countriesData.map((country) => (
+    <MenuItem key={country.name} value={country.name}>
+      {country.name}
+    </MenuItem>
+  ));
+
+  const states = countriesData.find((country) => country === country.name)?.states.map((state) => (
+    <MenuItem key={state} value={state}>
+      {state}
+    </MenuItem>
+  ));
 
   const searchOnChange = (e) => {
-    setFindProduct({ ...findProduct, [e.target.name]: [e.target.value] })
+    setFindProduct({ ...findProduct, [e.target.name]: [e.target.value] });
+    // setData(data => ({ state: '', country: e.target.value }));
+    // setData(data => ({ ...data, state: e.target.value }));
   }
 
   const searchFormSubmit = (e) => {
@@ -182,10 +225,10 @@ function ProductProfile() {
     console.log(findProduct)
   }
 
-  const { isLoaded } = useLoadScript({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
-  })
+  // const { isLoaded } = useLoadScript({
+  //   id: 'google-map-script',
+  //   googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
+  // })
   const [map, setMap] = useState(null)
   const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -320,11 +363,6 @@ function ProductProfile() {
               onChange={searchOnChange}
               margin="normal"
               style={{ backgroundColor: 'white' }}
-              // InputLabelProps={{
-              //   style: {
-              //     color: 'black',
-              //   }
-              // }}
             />
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -340,11 +378,6 @@ function ProductProfile() {
               onChange={searchOnChange}
               margin="normal"
               style={{ backgroundColor: 'white' }}
-              // InputLabelProps={{
-              //   style: {
-              //     color: 'black',
-              //   }
-              // }}
             />
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -356,14 +389,13 @@ function ProductProfile() {
               label="Select Country"
               style={{ backgroundColor: 'white' }}
               size="small"
-              name="selectcountry"
-              value={selectcountry}
+              name="country"
+              value={country}
               onChange={searchOnChange}
-              defaultValue='india'
+            // defaultValue='india'
             >
-              <MenuItem value="india">India</MenuItem>
-              {/* <MenuItem value="america">America</MenuItem>
-              <MenuItem value="australia">Australia</MenuItem> */}
+
+              {countries}
             </TextField>
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -375,13 +407,11 @@ function ProductProfile() {
               label="Select State"
               style={{ backgroundColor: 'white' }}
               size="small"
-              name="selectstate"
-              value={selectstate}
+              name="state"
+              value={state}
               onChange={searchOnChange}
             >
-              <MenuItem value="electricitybill">Andhra Pradesh</MenuItem>
-              <MenuItem value="waterbill">Telangana</MenuItem>
-              <MenuItem value="housetax">Karnataka</MenuItem>
+              {states}
             </TextField>
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -416,11 +446,6 @@ function ProductProfile() {
                   control={<Checkbox color="primary" />}
                   label={item.name}
                   labelPlacement="end"
-                  // InputLabelProps={{
-                  //   style: {
-                  //     fontSize: "5px"
-                  //   }
-                  // }}
                 />
               </Grid>
             ))}
@@ -430,7 +455,7 @@ function ProductProfile() {
           <button className="btn btn-warning" type="submit">Search</button>
         </Grid>
       </form>
-      {
+      {/* {
         isLoaded ? (
           <GoogleMap
             mapContainerStyle={containerStyle}
@@ -441,7 +466,7 @@ function ProductProfile() {
             onUnmount={onUnmount}
           >
             <>
-              {/* Child components, such as markers, info windows, etc. */}
+              Child components, such as markers, info windows, etc.
               {productPositions.map((item, index) => (
                 <Marker position={item} key={index} icon={`${process.env.PUBLIC_URL}/assets/mango.png`}></Marker>
               ))}
@@ -454,9 +479,9 @@ function ProductProfile() {
             </>
           </GoogleMap>
         ) : <></>
-      }
+      } */}
       <PPProduction />
-      <div style={{ padding: '10px 15px',margin:'15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>
+      <div style={{ padding: '10px 15px', margin: '15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>
         <h6>Trade</h6>
         <small><span style={{ color: 'red' }}>Source: Ministry of Commerce.</span> For Export, Import, Domestic Trade Values <a href='https://commerce.gov.in/' target='_blank' rel="noreferrer">(Click here)</a></small>
       </div>
@@ -478,10 +503,10 @@ function ProductProfile() {
       <PPSchemesPolicies />
       <PPProductGuide />
       <div className={classes.footPrintBlock}>
-        <h6 style={{color:'#d48715'}}>Foot Print</h6>
+        <h6 style={{ color: '#d48715' }}>Foot Print</h6>
       </div>
       <div className={classes.eximDocsBlock}>
-        <h6 style={{color:'#d48715'}}>Exim Documentation</h6>
+        <h6 style={{ color: '#d48715' }}>Exim Documentation</h6>
       </div>
     </>
   )
