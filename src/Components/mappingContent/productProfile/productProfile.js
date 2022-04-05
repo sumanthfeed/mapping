@@ -225,10 +225,10 @@ function ProductProfile() {
     console.log(findProduct)
   }
 
-  // const { isLoaded } = useLoadScript({
-  //   id: 'google-map-script',
-  //   googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
-  // })
+  const { isLoaded } = useLoadScript({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
+  })
   const [map, setMap] = useState(null)
   const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -455,7 +455,7 @@ function ProductProfile() {
           <button className="btn btn-warning" type="submit">Search</button>
         </Grid>
       </form>
-      {/* {
+      {
         isLoaded ? (
           <GoogleMap
             mapContainerStyle={containerStyle}
@@ -466,7 +466,7 @@ function ProductProfile() {
             onUnmount={onUnmount}
           >
             <>
-              Child components, such as markers, info windows, etc.
+              {/* Child components, such as markers, info windows, etc. */}
               {productPositions.map((item, index) => (
                 <Marker position={item} key={index} icon={`${process.env.PUBLIC_URL}/assets/mango.png`}></Marker>
               ))}
@@ -479,7 +479,7 @@ function ProductProfile() {
             </>
           </GoogleMap>
         ) : <></>
-      } */}
+      }
       <PPProduction />
       <div style={{ padding: '10px 15px', margin: '15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>
         <h6>Trade</h6>
