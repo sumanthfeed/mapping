@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Menu, MenuItem, Tooltip } from '@material-ui/core';
+import { Menu, MenuItem, Tooltip,Grid } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import MappingContent from '../mappingContent/mappingContent';
-import Navbar from '../navBar/navbar';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -27,6 +26,14 @@ import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import { Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
+import Dashboard from '../dashboard/dashboard';
 
 const drawerWidth = 240;
 
@@ -118,7 +125,24 @@ function DrawerBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const navitems = [
+    {
+      view: 'Dashboard',
+      link: '/contentview/dashboard'
+    },
+    {
+      view: 'Product Mapping',
+      link: '/contentview/mappingview'
+    },
+    {
+      view: 'Exim Documentation',
+      link: ''
+    },
+    {
+      view: 'FEED Foot Print',
+      link: ''
+    },
+  ]
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -141,7 +165,7 @@ function DrawerBar() {
           {/* <Typography variant="h6" noWrap>
             FEED
           </Typography> */}
-          <div style={{position:'absolute',right:'30px'}}>
+          <div style={{ position: 'absolute', right: '30px' }}>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
@@ -230,7 +254,6 @@ function DrawerBar() {
         <div className={classes.toolbarhead}>
           <img
             src={`${process.env.PUBLIC_URL}/assets/feed logo.png`}
-            // className="feed-logo-img"
             width='35%'
             alt="feed-logo"
           />
@@ -240,22 +263,14 @@ function DrawerBar() {
             </IconButton>
           </div>
         </div>
-        <Divider />
         <List>
-          {[ 'Product Mapping'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['Dashboard','All mail',  'Send email','Trash', 'Spam', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+          {navitems.map((item, index) => (
+            <Grid component={Link} to={item.link} key={index}>
+              <ListItem>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={item.view} />
+              </ListItem>
+            </Grid>
           ))}
         </List>
       </Drawer>
@@ -266,7 +281,14 @@ function DrawerBar() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <MappingContent />
+        {/* <MappingContent /> */}
+        {/* <Router> */}
+          <Switch>
+            <Route path='/contentview/dashboard' component={Dashboard}></Route>
+            <Route path='/contentview/mappingview' component={MappingContent}></Route>
+            <Redirect to='/contentview/mappingview'/>
+          </Switch>
+        {/* </Router> */}
       </main>
     </div>
   );

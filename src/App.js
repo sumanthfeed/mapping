@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
 // import { Route, Switch } from 'react-router';
-import Navbar from './Components/navBar/navbar';
 import ProductNavbar from './Components/productNavbar/productNavbar';
 import MappingContent from './Components/mappingContent/mappingContent';
 import DrawerBar from './Components/drawer/drawer';
@@ -32,9 +31,9 @@ function App() {
       <Router>
         <Switch>
           <Route path='/login' component={Login}></Route>
-          <Route path='/mappingview' component={DrawerBar}></Route>
+          <Route path='/contentview' component={DrawerBar}></Route>
           <Route path='/forgotpassword' component={ForgotPassword}></Route>
-          <Redirect to='/mappingview'/>
+          <Redirect to='/contentview'/>
         </Switch>
       </Router>
     </>

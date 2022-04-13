@@ -1,23 +1,24 @@
 import React from 'react'
 import './ppProduction.css'
-import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, Divider, } from '@material-ui/core';
+import { makeStyles, Divider, } from '@material-ui/core';
 import { ChildCare } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
 
 }));
-function PPProduction() {
+function PPProduction(props) {
   const classes = useStyles();
   return (
     <>
-      <div className='ppProductionWraper'>
-        <h6 style={{color:'#d48715'}}>Production</h6>
-        <Divider/>
+      <div className='ppProductionWraper table-responsive'>
+        <h6 style={{ color: '#d48715' }}>Production</h6>
+        <Divider />
         <p>Country Production</p>
-        <table>
+        <table className='table'>
           <thead>
             <tr>
               <th>Country</th>
+              <th>Product</th>
               <th>Area in Ha</th>
               <th>Production</th>
             </tr>
@@ -25,7 +26,22 @@ function PPProduction() {
           <tbody>
             <tr>
               <td>India</td>
-              <td>100</td>
+              <td>
+                {props.productname.map((item, index) => (
+                  <>
+                    <div key={index}>{item}</div>
+                    <hr style={{margin:'0px',padding:'0px'}}/>
+                  </>
+                ))}
+              </td>
+              <td>
+                {props.ha.map((item, index) => (
+                  <>
+                    <div key={index}>{item}</div>
+                    <hr style={{margin:'0px',padding:'0px'}}/>
+                  </>
+                ))}
+              </td>
               <td>1500</td>
             </tr>
           </tbody>
@@ -45,16 +61,6 @@ function PPProduction() {
               <td>100</td>
               <td>1500</td>
             </tr>
-            <tr>
-              <td>Telangana</td>
-              <td>150</td>
-              <td>2500</td>
-            </tr>
-            <tr>
-              <td>Tamil Nadu</td>
-              <td>200</td>
-              <td>3000</td>
-            </tr>
           </tbody>
         </table>
         <p>District Wise Production</p>
@@ -73,18 +79,6 @@ function PPProduction() {
               <td>Krishna</td>
               <td>100</td>
               <td>1500</td>
-            </tr>
-            <tr>
-              <td>Telangana</td>
-              <td>Hyderabad</td>
-              <td>150</td>
-              <td>2500</td>
-            </tr>
-            <tr>
-              <td>Tamil Nadu</td>
-              <td>Chennai</td>
-              <td>200</td>
-              <td>3000</td>
             </tr>
           </tbody>
         </table>

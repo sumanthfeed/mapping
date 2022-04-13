@@ -13,6 +13,7 @@
 
 .ppProductionWraper thead {
   background-color: #f7f9fc;
+  text-align: center;
 }
 
 .ppProductionWraper td, th {
@@ -20,6 +21,7 @@
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
+  text-align: center;
 }
 
 .ppProductionWraper tr:nth-child(even) {

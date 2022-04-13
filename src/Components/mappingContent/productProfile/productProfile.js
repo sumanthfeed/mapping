@@ -1,5 +1,9 @@
-import React, { useState, useMemo, useRef, useCallback } from 'react'
-import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, Divider, } from '@material-ui/core';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import axios from 'axios'
+import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, ListItem, ListItemText,Select,OutlinedInput } from '@material-ui/core';
+import Autocomplete, {
+  createFilterOptions
+} from "@material-ui/lab/Autocomplete";
 import PieChart from '../../analytics/pieChart/pieChart';
 import { GoogleMap, useJsApiLoader, Marker, LoadScript, Polygon, useLoadScript } from "@react-google-maps/api";
 import PPProduction from './ppProduction/ppProduction';
@@ -9,6 +13,10 @@ import PPVau from './ppVau/ppVau';
 import PPBuyerSeller from './ppBuyerSeller/ppBuyerSeller';
 import PPSchemesPolicies from './ppSchemesPolicies/ppSchemesPolicies';
 import PPProductGuide from './ppProductGuide/ppProductGuide';
+// import OutlinedInput from '@mui/material/OutlinedInput';
+
+require('es6-promise').polyfill()
+require('isomorphic-fetch')
 
 const district = [
   {
@@ -194,11 +202,14 @@ function ProductProfile() {
   const [findProduct, setFindProduct] = useState({
     productname: '',
     hscode: '',
+    exportercountry: '',
     country: '',
     state: '',
     selectdistrict: '',
   })
-  const { productname, hscode, country, state, selectdistrict } = findProduct;
+  const [mapData, setMapData] = useState([])
+
+  const { productname, hscode, exportercountry, country, state, selectdistrict } = findProduct;
 
 
 
@@ -220,15 +231,21 @@ function ProductProfile() {
     // setData(data => ({ ...data, state: e.target.value }));
   }
 
-  const searchFormSubmit = (e) => {
+  const SearchFormSubmit = (e) => {
     e.preventDefault();
     console.log(findProduct)
+    useEffect(() => {
+      fetch('http://localhost:5000/auth/getproduct')
+        .then(response => response.json())
+        .then((json) => setMapData(json)).then((json) => console.log(json))
+    }, [])
   }
 
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
     googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
   })
+
   const [map, setMap] = useState(null)
   const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -250,6 +267,33 @@ function ProductProfile() {
 
 
   // const mapRef = new window.google.maps.current.panTo(position)
+
+
+  // function ShowData (){
+  //   useEffect(() => {
+  //     fetch('http://localhost:5000/auth/getproduct')
+  //       .then(response => response.json())
+  //       .then((json) => setMapData(json)).then((json) => console.log(json))
+  //   }, [])
+  // }
+
+  // const handleClick = () => {
+  //   fetch('http://localhost:5000/auth/getallproducts', {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json'
+  //     }
+
+  //   })
+  //     .then(response => response.json())
+  //     .then((json) => setMapData(json))
+  // }
+  // const [selected, setSelected] = useState("");
+  // const changeHandler = e => {
+  //   setSelected(e.target.value);
+  // };
+
+
 
   const productPositions = [
     {
@@ -340,9 +384,66 @@ function ProductProfile() {
       lng: 17.873886
     },
   ]
+
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
+  // mapData.map((item, index) => (
+  //   product = {item.productname}
+  // ))
+
+  const product = mapData.map(item => item.productname)
+  const ha = mapData.map(item => item.hscode)
+  console.log(product)
+  const filterOptions = createFilterOptions({
+    stringify: ({ firstName, lastName, hsncode }) => `${firstName} ${lastName} ${hsncode}`
+  });
+  const students = [
+    {
+      hsncode: `01234`,
+      firstName: "Mango",
+      lastName: "One"
+    },
+    {
+      hsncode: `02345`,
+      firstName: "Apple",
+      lastName: "Two"
+    },
+    {
+      hsncode: `03456`,
+      firstName: "Banana",
+      lastName: "Three"
+    }
+  ];
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   return (
     <>
-      <form onSubmit={searchFormSubmit}>
+      {/* {mapData.map((item, index) => (
+        <div key={index}>
+          <li>{item.productname}</li>
+          <li>{item.hscode}</li>
+        </div>
+      ))} */}
+      <form onSubmit={SearchFormSubmit}>
         <Grid
           container
           lg={12}
@@ -351,33 +452,31 @@ function ProductProfile() {
           spacing={1}
         >
           <Grid lg={2} md={3} sm={12} xs={12} item>
-            <TextField
-              fullWidth
-              type="text"
-              size="small"
-              variant="outlined"
-              label="Product Name"
-              placeholder="Product Name"
-              name="productname"
-              value={productname}
-              onChange={searchOnChange}
-              margin="normal"
-              style={{ backgroundColor: 'white' }}
-            />
-          </Grid>
-          <Grid lg={2} md={3} sm={12} xs={12} item>
-            <TextField
-              fullWidth
-              type="text"
-              size="small"
-              variant="outlined"
-              label="HS Code"
-              placeholder="HS Code"
-              name="hscode"
-              value={hscode}
-              onChange={searchOnChange}
-              margin="normal"
-              style={{ backgroundColor: 'white' }}
+            <Autocomplete
+              options={students}
+              onInputChange={(event) => event.target}
+              filterOptions={filterOptions}
+              getOptionLabel={({ firstName }) => {
+                return ` ${firstName}`;
+              }}
+              filterSelectedOptions
+              renderOption={({ firstName, hsncode }) => {
+                return (
+                  <>
+                    {`${hsncode}`} {`${firstName} `}
+                  </>
+                );
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  size="small"
+                  margin="normal"
+                  name='productname'
+                  label="Product / Hsn code"
+                />
+              )}
             />
           </Grid>
           <Grid lg={2} md={3} sm={12} xs={12} item>
@@ -386,7 +485,24 @@ function ProductProfile() {
               select
               variant="outlined"
               margin="normal"
-              label="Select Country"
+              label="Exporter"
+              style={{ backgroundColor: 'white' }}
+              size="small"
+              name="exportercountry"
+              value={exportercountry}
+              onChange={searchOnChange}
+            // defaultValue='india'
+            >
+              <MenuItem value='india'>India</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid lg={2} md={3} sm={12} xs={12} item>
+            <TextField
+              fullWidth
+              select
+              variant="outlined"
+              margin="normal"
+              label="Importer"
               style={{ backgroundColor: 'white' }}
               size="small"
               name="country"
@@ -433,8 +549,11 @@ function ProductProfile() {
             </TextField>
           </Grid>
         </Grid>
+        <Grid container justifyContent="center" style={{ marginTop: '15px' }}>
+          <button className="btn btn-warning" type="submit">Search</button>
+        </Grid>
         <div>
-          <label>Category Selection</label>
+          <label>Category Filters</label>
           <FormGroup row>
             {categoryModelOne.map((item, index) => (
               <Grid item lg={2} key={index}>
@@ -451,11 +570,9 @@ function ProductProfile() {
             ))}
           </FormGroup>
         </div>
-        <Grid container justifyContent="center" style={{ marginTop: '15px' }}>
-          <button className="btn btn-warning" type="submit">Search</button>
-        </Grid>
       </form>
-      {
+
+       {
         isLoaded ? (
           <GoogleMap
             mapContainerStyle={containerStyle}
@@ -466,7 +583,7 @@ function ProductProfile() {
             onUnmount={onUnmount}
           >
             <>
-              {/* Child components, such as markers, info windows, etc. */}
+              Child components, such as markers, info windows, etc.
               {productPositions.map((item, index) => (
                 <Marker position={item} key={index} icon={`${process.env.PUBLIC_URL}/assets/mango.png`}></Marker>
               ))}
@@ -479,8 +596,28 @@ function ProductProfile() {
             </>
           </GoogleMap>
         ) : <></>
-      }
-      <PPProduction />
+      } 
+      {/* <Select
+        labelId="demo-multiple-checkbox-label"
+        id="demo-multiple-checkbox"
+        multiple
+        size='small'
+        value={personName}
+        onChange={handleChange}
+        input={<OutlinedInput label="Tag" />}
+        renderValue={(selected) => selected.join(', ')}
+        MenuProps={MenuProps}
+        style={{width:'250px'}}
+      >
+        {names.map((name) => (
+          <MenuItem key={name} value={name}>
+            <Checkbox checked={personName.indexOf(name) > -1} />
+            <ListItemText primary={name} />
+          </MenuItem>
+        ))}
+      </Select> */}
+      {/* <button onClick={handleClick}>click</button> */}
+      <PPProduction productname={product} ha={ha} />
       <div style={{ padding: '10px 15px', margin: '15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>
         <h6>Trade</h6>
         <small><span style={{ color: 'red' }}>Source: Ministry of Commerce.</span> For Export, Import, Domestic Trade Values <a href='https://commerce.gov.in/' target='_blank' rel="noreferrer">(Click here)</a></small>
@@ -502,12 +639,12 @@ function ProductProfile() {
       <PPBuyerSeller />
       <PPSchemesPolicies />
       <PPProductGuide />
-      <div className={classes.footPrintBlock}>
+      {/* <div className={classes.footPrintBlock}>
         <h6 style={{ color: '#d48715' }}>Foot Print</h6>
       </div>
       <div className={classes.eximDocsBlock}>
         <h6 style={{ color: '#d48715' }}>Exim Documentation</h6>
-      </div>
+      </div> */}
     </>
   )
 }
