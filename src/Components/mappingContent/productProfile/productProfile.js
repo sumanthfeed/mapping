@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import axios from 'axios'
+// import axios from 'axios'
 import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, ListItem, ListItemText,Select,OutlinedInput } from '@material-ui/core';
 import Autocomplete, {
   createFilterOptions
@@ -15,8 +15,8 @@ import PPSchemesPolicies from './ppSchemesPolicies/ppSchemesPolicies';
 import PPProductGuide from './ppProductGuide/ppProductGuide';
 // import OutlinedInput from '@mui/material/OutlinedInput';
 
-require('es6-promise').polyfill()
-require('isomorphic-fetch')
+// require('es6-promise').polyfill()
+// require('isomorphic-fetch')
 
 const district = [
   {
@@ -243,7 +243,7 @@ function ProductProfile() {
 
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyB0sR0nQ1Gc4vghLJ-qnEgKlCpwhSxC9zY",
+    googleMapsApiKey: "AIzaSyBIHTaAXKPDfB8L80tVGf7nwOBCiGZK7zI",
   })
 
   const [map, setMap] = useState(null)
@@ -583,7 +583,7 @@ function ProductProfile() {
             onUnmount={onUnmount}
           >
             <>
-              Child components, such as markers, info windows, etc.
+              {/* Child components, such as markers, info windows, etc. */}
               {productPositions.map((item, index) => (
                 <Marker position={item} key={index} icon={`${process.env.PUBLIC_URL}/assets/mango.png`}></Marker>
               ))}
