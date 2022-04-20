@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 // import axios from 'axios'
-import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, ListItem, ListItemText,Select,OutlinedInput } from '@material-ui/core';
+import { Grid, MenuItem, TextField, makeStyles, FormControlLabel, Checkbox, FormGroup, ListItem, ListItemText, Select, OutlinedInput } from '@material-ui/core';
 import Autocomplete, {
   createFilterOptions
 } from "@material-ui/lab/Autocomplete";
@@ -13,10 +13,11 @@ import PPVau from './ppVau/ppVau';
 import PPBuyerSeller from './ppBuyerSeller/ppBuyerSeller';
 import PPSchemesPolicies from './ppSchemesPolicies/ppSchemesPolicies';
 import PPProductGuide from './ppProductGuide/ppProductGuide';
-// import OutlinedInput from '@mui/material/OutlinedInput';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
-// require('es6-promise').polyfill()
-// require('isomorphic-fetch')
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const district = [
   {
@@ -198,7 +199,14 @@ function ProductProfile() {
   //   setData(data => ({ ...data, state: event.target.value }));
   // }
 
-
+  const [filteredlist, setFilteredList] = useState({
+    filtereditem: ''
+  })
+  const { filetereditem } = filteredlist
+  const getfilteredlist = (e) => {
+    setFilteredList({ ...filteredlist, [e.target.name]: [e.target.value] })
+    console.log(filteredlist)
+  }
   const [findProduct, setFindProduct] = useState({
     productname: '',
     hscode: '',
@@ -233,12 +241,6 @@ function ProductProfile() {
 
   const SearchFormSubmit = (e) => {
     e.preventDefault();
-    console.log(findProduct)
-    useEffect(() => {
-      fetch('http://localhost:5000/auth/getproduct')
-        .then(response => response.json())
-        .then((json) => setMapData(json)).then((json) => console.log(json))
-    }, [])
   }
 
   const { isLoaded } = useLoadScript({
@@ -246,20 +248,20 @@ function ProductProfile() {
     googleMapsApiKey: "AIzaSyBIHTaAXKPDfB8L80tVGf7nwOBCiGZK7zI",
   })
 
-  const [map, setMap] = useState(null)
-  const onLoad = useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map)
-  }, [])
+  const [map, setMap] = useState(/** @type google.maps.Map */(null))
+  // const onLoad = useCallback(function callback(map) {
+  //   const bounds = new window.google.maps.LatLngBounds();
+  //   map.fitBounds(bounds);
+  //   setMap(map)
+  // }, [])
   const options = useMemo(() => ({
     disableDefaultUI: false,
     clickableIcons: true,
   }), [])
 
   const center = useMemo(() => ({
-    lat: 20.5937,
-    lng: 78.9629
+    lat: 0.0,
+    lng: 0.0
   }), [])
   const onUnmount = useCallback(function callback(map) {
     setMap(map)
@@ -435,6 +437,85 @@ function ProductProfile() {
       typeof value === 'string' ? value.split(',') : value,
     );
   };
+
+  const filterCategory = [
+    {
+      name: 'Production',
+      value: 'production',
+      // icon: 'fas fa-tractor'
+    },
+    {
+      name: 'Trade',
+      value: 'trade',
+      // icon: 'fas fa-tractor'
+    },
+    {
+      name: 'Untapped',
+      value: 'untapped',
+      // icon: 'fas fa-tractor'
+    },
+    {
+      name: 'By - Products',
+      value: 'production',
+      // icon: 'fas fa-tractor'
+    },
+    {
+      name: 'FPO',
+      value: 'fpo',
+      // icon: 'fas fa-users',
+    },
+    {
+      name: 'Value Added Units',
+      value: 'vad',
+      // icon: 'fas fa-warehouse',
+    },
+    {
+      name: 'Market Yards',
+      value: 'marketYards',
+      // icon: 'fas fa-store',
+    },
+    {
+      name: 'Sellers / Exporters',
+      value: 'sellersExporters',
+      icon: '',
+    },
+    {
+      name: 'Buyers / Impoters',
+      value: 'buyersImporters',
+    },
+    {
+      name: 'Schemes & policies',
+      value: 'Schemes & policies',
+    },
+    {
+      name: 'Exim Documentation',
+      value: 'Exim Documentation',
+    },
+    {
+      name: 'Packing Guide',
+      value: 'Packing Guide',
+    },
+    {
+      name: 'Domestic Market',
+      value: 'Domestic Market',
+    },
+    {
+      name: 'World Top 10 Importing Countries',
+      value: 'World top 10 Importing Countries',
+    },
+    {
+      name: 'World Top 10 Exporting Countries',
+      value: 'World Top 10 exporting countries',
+    },
+    {
+      name: 'Top 10 Importing Countries from India',
+      value: 'top 10 Importing countries from India',
+    },
+    {
+      name: 'Top 10 Exporting Countries to India',
+      value: 'top 10 exporting countries to India',
+    },
+  ];
   return (
     <>
       {/* {mapData.map((item, index) => (
@@ -552,7 +633,7 @@ function ProductProfile() {
         <Grid container justifyContent="center" style={{ marginTop: '15px' }}>
           <button className="btn btn-warning" type="submit">Search</button>
         </Grid>
-        <div>
+        {/* <div>
           <label>Category Filters</label>
           <FormGroup row>
             {categoryModelOne.map((item, index) => (
@@ -569,17 +650,43 @@ function ProductProfile() {
               </Grid>
             ))}
           </FormGroup>
-        </div>
-      </form>
+        </div> */}
 
-       {
+      </form>
+      <div>
+        <Autocomplete
+          multiple
+          id="checkboxes-tags-demo"
+          options={filterCategory}
+          disableCloseOnSelect
+          getOptionLabel={(option) => option.name}
+          renderOption={(option, { selected }) => (
+            <React.Fragment>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.name}
+            </React.Fragment>
+          )}
+          style={{ width: '100%' }}
+          renderInput={(params) => (
+            <TextField {...params} placeholder="Filter Category" margin='normal' size='small' name='filetereditem' value={filetereditem} onChange={getfilteredlist}/>
+          )}
+        />
+      </div>
+
+      {
         isLoaded ? (
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            zoom={10}
+            zoom={2}
             options={options}
-            onLoad={onLoad}
+            // onLoad={onLoad}
+            onLoad={(map) => setMap(map)}
             onUnmount={onUnmount}
           >
             <>
@@ -596,26 +703,7 @@ function ProductProfile() {
             </>
           </GoogleMap>
         ) : <></>
-      } 
-      {/* <Select
-        labelId="demo-multiple-checkbox-label"
-        id="demo-multiple-checkbox"
-        multiple
-        size='small'
-        value={personName}
-        onChange={handleChange}
-        input={<OutlinedInput label="Tag" />}
-        renderValue={(selected) => selected.join(', ')}
-        MenuProps={MenuProps}
-        style={{width:'250px'}}
-      >
-        {names.map((name) => (
-          <MenuItem key={name} value={name}>
-            <Checkbox checked={personName.indexOf(name) > -1} />
-            <ListItemText primary={name} />
-          </MenuItem>
-        ))}
-      </Select> */}
+      }
       {/* <button onClick={handleClick}>click</button> */}
       <PPProduction productname={product} ha={ha} />
       <div style={{ padding: '10px 15px', margin: '15px 0px', boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.75)', borderRadius: '10px 10px' }}>

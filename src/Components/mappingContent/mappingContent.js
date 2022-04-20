@@ -47,8 +47,8 @@ const useStyles = makeStyles(theme => ({
   mappingContentWrap: {
     borderRadius: '10px 10px',
     backgroundColor: 'white',
-    border: "1px solid #f0f0f0"
-  }
+    // border: "1px solid #f0f0f0"
+  },
 }));
 
 function MappingContent() {

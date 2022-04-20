@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Menu, MenuItem, Tooltip,Grid } from '@material-ui/core';
+import { Menu, MenuItem, Tooltip, Grid } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -46,8 +46,14 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: 'white',
-    color: "black"
+    backgroundColor: '#fafafa',
+    color: "black",
+    // borderBottom:'1px solid #e8e8e8',
+    // borderRadius:"0px 0px 10px 10px",
+    // boxShadow: '0px 2px 5px 0px rgba(0,0,0,0.1)',
+    // webkitBoxShadow: '0px 2px 5px 0px rgba(0,0,0,0.1)',
+    // mozBoxShadow: '0px 2px 5px 0px rgba(0,0,0,0.1)',
+    boxShadow:'none'
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -89,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -281,14 +287,11 @@ function DrawerBar() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {/* <MappingContent /> */}
-        {/* <Router> */}
-          <Switch>
-            <Route path='/contentview/dashboard' component={Dashboard}></Route>
-            <Route path='/contentview/mappingview' component={MappingContent}></Route>
-            <Redirect to='/contentview/mappingview'/>
-          </Switch>
-        {/* </Router> */}
+        <Switch>
+          <Route path='/contentview/dashboard' component={Dashboard}></Route>
+          <Route path='/contentview/mappingview' component={MappingContent}></Route>
+          <Redirect to='/contentview/mappingview' />
+        </Switch>
       </main>
     </div>
   );
