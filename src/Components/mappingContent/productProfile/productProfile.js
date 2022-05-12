@@ -5,7 +5,7 @@ import Autocomplete, {
   createFilterOptions
 } from "@material-ui/lab/Autocomplete";
 import PieChart from '../../analytics/pieChart/pieChart';
-import { GoogleMap, useJsApiLoader, Marker, LoadScript, Polygon, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker, LoadScript, Polygon, useLoadScript, MarkerClusterer, } from "@react-google-maps/api";
 import PPProduction from './ppProduction/ppProduction';
 import PPUntapped from './ppUntapped/ppUntapped';
 import PPByProducts from './ppByProducts/ppByProducts';
@@ -271,25 +271,6 @@ function ProductProfile() {
   // const mapRef = new window.google.maps.current.panTo(position)
 
 
-  // function ShowData (){
-  //   useEffect(() => {
-  //     fetch('http://localhost:5000/auth/getproduct')
-  //       .then(response => response.json())
-  //       .then((json) => setMapData(json)).then((json) => console.log(json))
-  //   }, [])
-  // }
-
-  // const handleClick = () => {
-  //   fetch('http://localhost:5000/auth/getallproducts', {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json'
-  //     }
-
-  //   })
-  //     .then(response => response.json())
-  //     .then((json) => setMapData(json))
-  // }
   // const [selected, setSelected] = useState("");
   // const changeHandler = e => {
   //   setSelected(e.target.value);
@@ -673,7 +654,7 @@ function ProductProfile() {
           )}
           style={{ width: '100%' }}
           renderInput={(params) => (
-            <TextField {...params} placeholder="Filter Category" margin='normal' size='small' name='filetereditem' value={filetereditem} onChange={getfilteredlist}/>
+            <TextField {...params} placeholder="Filter Category" margin='normal' size='small' name='filetereditem' value={filetereditem} onChange={getfilteredlist} />
           )}
         />
       </div>
@@ -710,6 +691,7 @@ function ProductProfile() {
         <h6>Trade</h6>
         <small><span style={{ color: 'red' }}>Source: Ministry of Commerce.</span> For Export, Import, Domestic Trade Values <a href='https://commerce.gov.in/' target='_blank' rel="noreferrer">(Click here)</a></small>
       </div>
+      <button className='btn btn-danger' onClick={()=>window.print()}>Print screen</button>
       <PPUntapped />
       <PPByProducts />
       <PPVau />
